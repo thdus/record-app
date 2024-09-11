@@ -126,6 +126,8 @@ class MainActivity : AppCompatActivity(), OnTimerTickListener {
                 start()
             }
 
+            binding.waveformView.clearData()
+
             timer.start()
 
             binding.recordButton.setImageDrawable(
@@ -176,6 +178,10 @@ class MainActivity : AppCompatActivity(), OnTimerTickListener {
             start()
         }
 
+        binding.waveformView.clearWave()
+
+        timer.start()
+
         player?.setOnCompletionListener {
             stopPlaying()
         }
@@ -189,6 +195,8 @@ class MainActivity : AppCompatActivity(), OnTimerTickListener {
 
         player?.release()
         player = null
+
+        timer.stop()
 
         binding.recordButton.isEnabled = true
         binding.recordButton.alpha
@@ -249,6 +257,19 @@ class MainActivity : AppCompatActivity(), OnTimerTickListener {
     }
 
     override fun onTick(duration: Long) {
-        binding.waveformView.addAmplitude(recorder?.maxAmplitude?.toFloat() ?: 0f)
+        val millisecond = duration % 1000
+        val second = (duration / 1000) % 60
+        val minute = (duration / 1000 / 60)
+
+
+        binding.timerTextView.text =
+            String.format("%02d:%02d.%02d", minute, second, millisecond / 10)
+
+        if (state == State.PLAYING) {
+            binding.waveformView.replayAmplitude(duration.toInt())
+        } else if (state == State.RECORDING) {
+
+            binding.waveformView.addAmplitude(recorder?.maxAmplitude?.toFloat() ?: 0f)
+        }
     }
 }
