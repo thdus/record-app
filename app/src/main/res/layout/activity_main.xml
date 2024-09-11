@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <View
+    <com.example.myapplication10.WaveformView
         android:id="@+id/waveformView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
