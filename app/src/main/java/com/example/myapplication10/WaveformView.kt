@@ -20,7 +20,7 @@ class WaveformView @JvmOverloads constructor(
     private val ampList = mutableListOf<Float>()
     private val recList = mutableListOf<RectF>()
 
-    private val rectWidth = 10f
+    private val rectWidth = 15f
     private var tick = 0
 
     private val redPaint = Paint().apply {
@@ -36,8 +36,10 @@ class WaveformView @JvmOverloads constructor(
     }
 
     fun addAmplitude(maxAmplitude: Float) {
+        val height = this.height
+        val amplitude = (maxAmplitude / Short.MAX_VALUE) * this.height * 0.8f
 
-        ampList.add(maxAmplitude)
+        ampList.add(amplitude)
         recList.clear()
 
 
@@ -47,10 +49,10 @@ class WaveformView @JvmOverloads constructor(
 
         for ((i,amp) in amps.withIndex()) {
             val rectF = RectF()
-            rectF.top = 0f
+            rectF.top = (this.height / 2) - amp / 2 -3f
             rectF.bottom = amp
             rectF.left = i * rectWidth
-            rectF.right = rectF.left + rectWidth
+            rectF.right = rectF.left + rectWidth - 5f // 여백을 위해 5를 더 줌
 
             recList.add(rectF)
         }
@@ -59,7 +61,7 @@ class WaveformView @JvmOverloads constructor(
 
     }
 
-    fun replayAmplitude(duration: Int) {
+    fun replayAmplitude() {
         recList.clear()
 
 
@@ -68,10 +70,10 @@ class WaveformView @JvmOverloads constructor(
 
         for ((i,amp) in amps.withIndex()) {
             val rectF = RectF()
-            rectF.top = 0f
-            rectF.bottom = amp
+            rectF.top = (this.height / 2) - amp / 2 -2f
+            rectF.bottom = rectF.top + amp + 3f
             rectF.left = i * rectWidth
-            rectF.right = rectF.left + rectWidth
+            rectF.right = rectF.left + rectWidth - 5f
 
             recList.add(rectF)
         }
